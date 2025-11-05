@@ -4,13 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
+  <groupId>com.ontotext</groupId>
   <artifactId>embedding-model-clients</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>openai</module>
-    <module>common</module>
+    <module>embeddings-common</module>
+    <module>embeddings-minilml6q</module>
   </modules>
 
   <properties>
@@ -18,7 +19,8 @@
     <maven.compiler.target>21</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.shade.plugin.version>3.6.0</maven.shade.plugin.version>
-    <langchain4j.openai.version>1.6.0</langchain4j.openai.version>
+    <langchain4j.version>1.6.0</langchain4j.version>
+    <langchain4j.embeddings.version>1.6.0-beta12</langchain4j.embeddings.version>
   </properties>
 
   <build>
