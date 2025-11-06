@@ -10,29 +10,14 @@ import java.util.List;
 
 public class AllMiniLmL6V2QEmbeddingModel implements EmbeddingModel {
 
-    private AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel;
+  private final AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel;
 
-    public AllMiniLmL6V2QEmbeddingModel() {
-        this.embeddingModel = new AllMiniLmL6V2QuantizedEmbeddingModel();
-    }
+  public AllMiniLmL6V2QEmbeddingModel() {
+    this.embeddingModel = new AllMiniLmL6V2QuantizedEmbeddingModel();
+  }
 
-    @Override
-    public Response<List<Embedding>> embedAll(List<TextSegment> textSegments) {
-        return embeddingModel.embedAll(textSegments);
-    }
-
-    @Override
-    public Response<Embedding> embed(String text) {
-        return embeddingModel.embed(text);
-    }
-
-    @Override
-    public Response<Embedding> embed(TextSegment textSegment) {
-        return embeddingModel.embed(textSegment);
-    }
-
-    @Override
-    public int dimension() {
-        return embeddingModel.dimension();
-    }
+  @Override
+  public Response<List<Embedding>> embedAll(List<TextSegment> textSegments) {
+    return embeddingModel.embedAll(textSegments);
+  }
 }
