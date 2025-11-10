@@ -10,6 +10,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 import java.io.Closeable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -42,7 +43,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
 
     this.stub = InferenceServiceGrpc.newBlockingStub(channel);
     this.executor = createExecutor();
-    this.batchSize = Config.getPropertyInt(BATCH_SIZE_PROPERTY, 32);
+    this.batchSize = Config.getPropertyInt(BATCH_SIZE_PROPERTY, 256) * 1024;
   }
 
   private ExecutorService createExecutor() {
@@ -61,7 +62,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
   }
 
   @Override public Response<List<Embedding>> embedAll(List<TextSegment> segments) {
-    List<List<TextSegment>> batches = chunk(segments, batchSize);
+    List<List<TextSegment>> batches = chunkByBytes(segments, batchSize);
 
     List<CompletableFuture<List<Embedding>>> futures = batches.stream()
             .map(batch -> CompletableFuture.supplyAsync(() -> {
@@ -70,9 +71,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
                       .addAllTexts(batch.stream().map(TextSegment::text).toList())
                       .build();
 
-              GraphwiseTransformer.SentenceResponse response = InferenceServiceGrpc
-                      .newBlockingStub(channel)
-                      .embedSentence(request);
+              GraphwiseTransformer.SentenceResponse response = stub.embedSentence(request);
 
               return toLangchainEmbeddings(response.getEmbeddingsList());
             }, executor))
@@ -86,11 +85,38 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
     return Response.from(allEmbeddings);
   }
 
-  private static <T> List<List<T>> chunk(List<T> list, int size) {
-    List<List<T>> chunks = new ArrayList<>();
-    for (int i = 0; i < list.size(); i += size) {
-      chunks.add(list.subList(i, Math.min(list.size(), i + size)));
+  private List<List<TextSegment>> chunkByBytes(List<TextSegment> segments, int maxBytes) {
+    List<List<TextSegment>> chunks = new ArrayList<>();
+    List<TextSegment> currentBatch = new ArrayList<>();
+    int currentBytes = 0;
+
+    for (TextSegment segment : segments) {
+      int size = segment.text().getBytes(StandardCharsets.UTF_8).length
+              + 32; // 32 bytes = message framing overhead
+
+      // If adding this text would exceed our safe batch limit
+      if (currentBytes + size > maxBytes) {
+        if (!currentBatch.isEmpty()) {
+          chunks.add(List.copyOf(currentBatch));
+          currentBatch.clear();
+          currentBytes = 0;
+        }
+
+        // If single item is huge (> limit), force it as its own batch
+        if (size > maxBytes) {
+          chunks.add(List.of(segment));
+          continue;
+        }
+      }
+
+      currentBatch.add(segment);
+      currentBytes += size;
     }
+
+    if (!currentBatch.isEmpty()) {
+      chunks.add(List.copyOf(currentBatch));
+    }
+
     return chunks;
   }
 
