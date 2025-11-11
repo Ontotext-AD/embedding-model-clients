@@ -12,6 +12,7 @@
     <module>openai</module>
     <module>embeddings-common</module>
     <module>embeddings-minilml6q</module>
+    <module>graphwise-transformer</module>
   </modules>
 
   <properties>
@@ -20,8 +21,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.shade.plugin.version>3.6.0</maven.shade.plugin.version>
     <maven.dependency.plugin.version>3.6.0</maven.dependency.plugin.version>
-    <langchain4j.version>1.6.0</langchain4j.version>
-    <langchain4j.embeddings.version>1.6.0-beta12</langchain4j.embeddings.version>
+    <langchain4j.version>1.8.0</langchain4j.version>
+    <langchain4j.embeddings.version>1.8.0-beta15</langchain4j.embeddings.version>
     <djl.tokenizer.version>0.31.1</djl.tokenizer.version>
   </properties>
 
@@ -56,6 +57,4 @@
       </plugin>
     </plugins>
   </build>
-
-
 </project>
