@@ -30,19 +30,7 @@ public class OpenAiEmbeddingModel implements EmbeddingModel {
     return builder.build();
   }
 
-  @Override public Response<Embedding> embed(String text) {
-    return embeddingModel.embed(text);
-  }
-
-  @Override public Response<Embedding> embed(TextSegment textSegment) {
-    return embeddingModel.embed(textSegment);
-  }
-
   @Override public Response<List<Embedding>> embedAll(List<TextSegment> list) {
     return embeddingModel.embedAll(list);
-  }
-
-  @Override public int dimension() {
-    return embeddingModel.dimension();
   }
 }
