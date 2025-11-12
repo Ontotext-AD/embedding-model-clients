@@ -1,5 +1,6 @@
-package com.ontotext;
+package com.ontotext.embeddings;
 
+import com.ontotext.Config;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
