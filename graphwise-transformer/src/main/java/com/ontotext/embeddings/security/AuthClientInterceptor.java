@@ -1,4 +1,4 @@
-package com.ontotext.security;
+package com.ontotext.embeddings.security;
 
 import io.grpc.*;
 import javax.crypto.Mac;

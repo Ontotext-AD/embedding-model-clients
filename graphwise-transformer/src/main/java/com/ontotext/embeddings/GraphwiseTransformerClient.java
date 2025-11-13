@@ -1,8 +1,9 @@
-package com.ontotext;
+package com.ontotext.embeddings;
 
 import ai.graphwise.transformer.GraphwiseTransformer;
 import ai.graphwise.transformer.InferenceServiceGrpc;
-import com.ontotext.security.AuthClientInterceptor;
+import com.ontotext.Config;
+import com.ontotext.embeddings.security.AuthClientInterceptor;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.exception.AuthenticationException;
