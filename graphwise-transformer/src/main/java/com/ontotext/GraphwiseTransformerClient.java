@@ -115,9 +115,9 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
   private ExecutorService createExecutor() {
     int threadPoolSize = THREAD_POOL_SIZE >= 0 ? THREAD_POOL_SIZE : Runtime.getRuntime().availableProcessors();
     return new ThreadPoolExecutor(
-            threadPoolSize, threadPoolSize,
+            Math.min(threadPoolSize, 2), threadPoolSize,
             30L, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(8),
+            new LinkedBlockingQueue<>(threadPoolSize * 2),
             r -> {
               Thread t = new Thread(r);
               t.setDaemon(true);
