@@ -21,11 +21,6 @@
         </dependency>
         <dependency>
             <groupId>com.ontotext</groupId>
-            <artifactId>embeddings-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ontotext</groupId>
             <artifactId>graphwise-transformer</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -44,8 +39,7 @@
                             <goal>shade</goal>
                         </goals>
                       <configuration>
-                        <createDependencyReducedPom>false</createDependencyReducedPom>
-                        <shadedArtifactAttached>true</shadedArtifactAttached>
+                        <createDependencyReducedPom>true</createDependencyReducedPom>
                         <filters>
                           <filter>
                             <artifact>*:*</artifact>
