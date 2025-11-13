@@ -33,10 +33,12 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
   public static final String BATCH_SIZE_PROPERTY = "graphwise.transformer.batch.size";
   public static final int BATCH_SIZE_DEFAULT = 256;
   public static final String AUTH_TOKEN_SECRET_PROPERTY = "graphwise.transformer.auth.token.secret";
+  public static final String THREAD_POOL_SIZE_PROPERTY = "graphwise.transformer.thread.pool.size";
 
   private static final String MODEL_NAME = Config.getProperty(MODEL_NAME_PROPERTY,  MODEL_NAME_DEFAULT);
   private static final String ADDRESS = Config.getProperty(ADDRESS_PROPERTY, ADDRESS_DEFAULT);
   private static final int BATCH_SIZE = Config.getPropertyInt(BATCH_SIZE_PROPERTY, BATCH_SIZE_DEFAULT) * 1024;
+  private static final int THREAD_POOL_SIZE = Config.getPropertyInt(THREAD_POOL_SIZE_PROPERTY, -1);
 
   private final ManagedChannel channel;
   private final InferenceServiceGrpc.InferenceServiceBlockingStub stub;
@@ -111,10 +113,11 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
   }
 
   private ExecutorService createExecutor() {
+    int threadPoolSize = THREAD_POOL_SIZE >= 0 ? THREAD_POOL_SIZE : Runtime.getRuntime().availableProcessors();
     return new ThreadPoolExecutor(
-            2, 4,
+            Math.min(threadPoolSize, 2), threadPoolSize,
             30L, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(8),
+            new LinkedBlockingQueue<>(threadPoolSize * 2),
             r -> {
               Thread t = new Thread(r);
               t.setDaemon(true);
