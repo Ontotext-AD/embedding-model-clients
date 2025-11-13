@@ -10,6 +10,10 @@
   <artifactId>graphwise-transformer</artifactId>
   <packaging>jar</packaging>
 
+  <properties>
+    <deploy.skip>true</deploy.skip>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.ontotext</groupId>
