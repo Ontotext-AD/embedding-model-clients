@@ -45,18 +45,20 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>org/slf4j/**</exclude>
-                                        <exclude>com/fasterxml/jackson/**</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
+                      <configuration>
+                        <createDependencyReducedPom>false</createDependencyReducedPom>
+                        <shadedArtifactAttached>true</shadedArtifactAttached>
+                        <filters>
+                          <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                              <exclude>META-INF/*.SF</exclude>
+                              <exclude>META-INF/*.DSA</exclude>
+                              <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                          </filter>
+                        </filters>
+                      </configuration>
                     </execution>
                 </executions>
             </plugin>

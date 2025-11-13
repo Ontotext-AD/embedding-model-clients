@@ -19,6 +19,7 @@
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
+    <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.shade.plugin.version>3.6.0</maven.shade.plugin.version>
     <maven.deploy.plugin.version>3.1.4</maven.deploy.plugin.version>
@@ -27,6 +28,13 @@
     <langchain4j.version>1.8.0</langchain4j.version>
     <langchain4j.embeddings.version>1.8.0-beta15</langchain4j.embeddings.version>
     <djl.tokenizer.version>0.31.1</djl.tokenizer.version>
+    <slf4j.version>2.0.16</slf4j.version>
+    <jackson.version>2.15.3</jackson.version>
+    <grpc.version>1.66.0</grpc.version>
+    <protobuf.version>3.25.5</protobuf.version>
+    <protobuf.maven.version>0.6.1</protobuf.maven.version>
+    <os.maven.version>1.7.1</os.maven.version>
+    <j2objc.version>3.0.0</j2objc.version>
     <internal.repo>https://maven.ontotext.com/content/repositories/owlim-releases</internal.repo>
     <snapshots.repo>https://maven.ontotext.com/content/repositories/owlim-snapshots</snapshots.repo>
 
@@ -51,6 +59,35 @@
     <url>https://gitlab.ontotext.com/graphdb-team/embedding-models</url>
     <tag>HEAD</tag>
   </scm>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <pluginManagement>
