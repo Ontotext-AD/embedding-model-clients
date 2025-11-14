@@ -4,7 +4,7 @@
 
   <groupId>com.ontotext</groupId>
   <artifactId>embedding-model-clients</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0-RC4</version>
   <packaging>pom</packaging>
   <modules>
     <module>openai</module>
@@ -56,7 +56,7 @@
     <connection>scm:git:https://gitlab.ontotext.com/graphdb-team/embedding-models.git</connection>
     <developerConnection>scm:git:https://gitlab.ontotext.com/graphdb-team/embedding-models.git</developerConnection>
     <url>https://gitlab.ontotext.com/graphdb-team/embedding-models</url>
-    <tag>HEAD</tag>
+    <tag>v1.0.0-RC4</tag>
   </scm>
 
   <dependencyManagement>
