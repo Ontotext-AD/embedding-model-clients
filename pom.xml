@@ -7,10 +7,9 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-    <module>openai</module>
-    <module>embeddings-common</module>
-    <module>embeddings-minilml6q</module>
-    <module>graphwise-transformer</module>
+    <module>openai-embedding-client</module>
+    <module>embedding-clients-common</module>
+    <module>graphwise-transformer-client</module>
     <module>assembly</module>
   </modules>
 
