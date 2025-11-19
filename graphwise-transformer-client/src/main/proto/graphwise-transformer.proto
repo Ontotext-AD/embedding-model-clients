@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_package = "ai.graphwise.transformer";
+
+package graphwise_transformer;
+
+message SentenceRequest {
+  string model_name = 1;
+  repeated string texts = 2;
+}
+
+message Embedding {
+  string string = 1;
+  repeated float embedding = 2;
+}
+
+message SentenceResponse {
+  repeated Embedding embeddings = 1;
+}
+
+service InferenceService {
+  rpc EmbedSentence(SentenceRequest) returns (SentenceResponse);
+}
