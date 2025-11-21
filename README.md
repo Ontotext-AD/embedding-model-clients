@@ -2,7 +2,7 @@
 
 This project provides a collection of clients for interacting with various embedding models. It includes modules for
 specific embedding model providers
-like [GraphWise Transformer](https://gitlab.ontotext.com/graphdb-team/graphwise-transformer) and OpenAI API.
+like [GraphWise Transformer](https://github.com/Ontotext-AD/graphwise-transformer) and OpenAI API.
 Clients are implementations of
 langchain4j [EmbeddingModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-core/src/main/java/dev/langchain4j/model/embedding/EmbeddingModel.java)
 interface.
@@ -21,7 +21,7 @@ and add them to your GraphDB distribution to use for similarity searches in Grap
 * **assembly**: Create an assembly jar that contains clients and their dependencies.
 * **embedding-clients-common**: Common code used by the other client modules.
 * **graphwise-transformer-client**: A client for interacting with
-  a [GraphWise Transformer](https://gitlab.ontotext.com/graphdb-team/graphwise-transformer).
+  a [GraphWise Transformer](https://github.com/Ontotext-AD/graphwise-transformer).
 * **openai-embedding-client**: A client for interacting with the OpenAI embedding API.
 
 ## Building
