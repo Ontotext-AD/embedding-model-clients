@@ -52,15 +52,17 @@ Clients are configured via system properties.
 | `graphwise.transformer.address`              | The host and port of the GraphWise Transformer service. | `localhost:5050`                                              |
 | `graphwise.transformer.embedding.model.name` | The name of the sentence transformer model to use.      | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` |
 | `graphwise.transformer.batch.size`           | The maximum request batch size in kilobytes.            | `256`                                                         |
-| `graphwise.transformer.auth.token.secret`    | Shared secret for authentication.                       | `null`                                                        |
+| `graphwise.transformer.auth.token.secret`    | Shared secret for authentication.                       | none                                                          |
 | `graphwise.transformer.thread.pool.size`     | The size of the client-side thread pool.                | Number of available processors                                |
 
 ### OpenAIEmbeddingClient
 
-| Property            | Description              | Default                  |
-|---------------------|--------------------------|--------------------------|
-| `openai.api.key`    | Your OpenAI API key.     | `null`                   |
-| `openai.model.name` | The OpenAI model to use. | `text-embedding-ada-002` |
+| Property                              | Description                  | Required |
+|---------------------------------------|------------------------------|----------|
+| `openai.embedding.model.api.key`      | Your OpenAI API key.         | yes      |
+| `openai.embedding.model.name`         | The OpenAI model to use.     | yes      |
+| `openai.embedding.model.dimensions`   | The OpenAI model dimensions. | no       |
+
 
 ## Usage
 
