@@ -47,21 +47,21 @@ Clients are configured via system properties.
 
 ### GraphwiseTransformerClient
 
-| Property                                     | Description                                             | Default                                                       |
-|----------------------------------------------|---------------------------------------------------------|---------------------------------------------------------------|
-| `graphwise.transformer.address`              | The host and port of the GraphWise Transformer service. | `localhost:5050`                                              |
-| `graphwise.transformer.embedding.model.name` | The name of the sentence transformer model to use.      | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` |
-| `graphwise.transformer.batch.size`           | The maximum request batch size in kilobytes.            | `256`                                                         |
-| `graphwise.transformer.auth.token.secret`    | Shared secret for authentication.                       | none                                                          |
-| `graphwise.transformer.thread.pool.size`     | The size of the client-side thread pool.                | Number of available processors                                |
+| Property                                     | Description                                             | Required | Default                                                       |
+|----------------------------------------------|---------------------------------------------------------|----------|---------------------------------------------------------------|
+| `graphwise.transformer.address`              | The host and port of the GraphWise Transformer service. | no       | `localhost:5050`                                              |
+| `graphwise.transformer.embedding.model.name` | The name of the sentence transformer model to use.      | no       | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` |
+| `graphwise.transformer.batch.size`           | The maximum request batch size in kilobytes.            | no       | `256`                                                         |
+| `graphwise.transformer.auth.token.secret`    | Shared secret for authentication.                       | no       | none                                                          |
+| `graphwise.transformer.thread.pool.size`     | The size of the client-side thread pool.                | no       | Number of available processors                                |
 
 ### OpenAIEmbeddingClient
 
-| Property                              | Description                  | Required |
-|---------------------------------------|------------------------------|----------|
-| `openai.embedding.model.api.key`      | Your OpenAI API key.         | yes      |
-| `openai.embedding.model.name`         | The OpenAI model to use.     | yes      |
-| `openai.embedding.model.dimensions`   | The OpenAI model dimensions. | no       |
+| Property                              | Description                  | Required | Default |
+|---------------------------------------|------------------------------|----------|---------|
+| `openai.embedding.model.api.key`      | Your OpenAI API key.         | yes      | none    |
+| `openai.embedding.model.name`         | The OpenAI model to use.     | yes      | none    |  
+| `openai.embedding.model.dimensions`   | The OpenAI model dimensions. | no       | none    | 
 
 
 ## Usage
