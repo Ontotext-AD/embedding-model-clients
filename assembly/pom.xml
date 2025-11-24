@@ -17,12 +17,12 @@
     <dependencies>
         <dependency>
             <groupId>com.ontotext</groupId>
-            <artifactId>openai</artifactId>
+            <artifactId>openai-embedding-client</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ontotext</groupId>
-            <artifactId>graphwise-transformer</artifactId>
+            <artifactId>graphwise-transformer-client</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
