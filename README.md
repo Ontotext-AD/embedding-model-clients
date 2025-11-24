@@ -71,8 +71,8 @@ Connectors by specifying the fully qualified class name of the desired implement
 
 **Example values for `embeddingModel` parameter:**
 
-* `com.ontotext.embedding.GraphwiseTransformerClient`
-* `com.ontotext.embedding.OpenAIEmbeddingClient`
+* `com.ontotext.embeddings.GraphwiseTransformerClient`
+* `com.ontotext.embeddings.OpenAIEmbeddingClient`
 
 ## License
 
