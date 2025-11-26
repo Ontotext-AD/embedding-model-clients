@@ -35,6 +35,9 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
     public static final int BATCH_SIZE_DEFAULT = 256;
     public static final String AUTH_TOKEN_SECRET_PROPERTY = "graphwise.transformer.auth.token.secret";
     public static final String THREAD_POOL_SIZE_PROPERTY = "graphwise.transformer.thread.pool.size";
+    public static final int MAX_MESSAGE_SIZE = 4 * 1024 * 1000; // slightly under 4MB
+    public static final int MESSAGE_FRAMING_OVERHEAD = 32;
+    public static final int FLOAT_BYTES = 4;
 
     private static final String MODEL_NAME = Config.getProperty(MODEL_NAME_PROPERTY, MODEL_NAME_DEFAULT);
     private static final String ADDRESS = Config.getProperty(ADDRESS_PROPERTY, ADDRESS_DEFAULT);
@@ -44,16 +47,18 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
     private final ManagedChannel channel;
     private final InferenceServiceGrpc.InferenceServiceBlockingStub stub;
     private final ExecutorService executor;
+    private final int embeddingSize;
 
     public GraphwiseTransformerClient() {
         this.channel = buildChannel();
         this.stub = InferenceServiceGrpc.newBlockingStub(channel);
         this.executor = createExecutor();
+        this.embeddingSize = this.dimension() * FLOAT_BYTES;
     }
 
     @Override
     public Response<List<Embedding>> embedAll(List<TextSegment> segments) {
-        List<List<TextSegment>> batches = chunkByBytes(segments);
+        List<List<TextSegment>> batches = createBatches(segments);
 
         List<CompletableFuture<List<Embedding>>> futures = batches.stream()
                 .map(batch -> CompletableFuture.supplyAsync(() -> {
@@ -78,8 +83,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
             Throwable cause = e.getCause();
             if (cause instanceof StatusRuntimeException sre
                     && sre.getStatus().getCode() == Status.Code.UNAUTHENTICATED) {
-                throw new AuthenticationException(
-                        "Authentication failed. Please verify shared secret.");
+                throw new AuthenticationException("Authentication failed due to: ", cause);
             }
             throw e;
         }
@@ -130,17 +134,19 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
         );
     }
 
-    private List<List<TextSegment>> chunkByBytes(List<TextSegment> segments) {
+    private List<List<TextSegment>> createBatches(List<TextSegment> segments) {
         List<List<TextSegment>> chunks = new ArrayList<>();
         List<TextSegment> currentBatch = new ArrayList<>();
         int currentBytes = 0;
 
         for (TextSegment segment : segments) {
             int size = segment.text().getBytes(StandardCharsets.UTF_8).length
-                    + 32; // 32 bytes = message framing overhead
+                    + MESSAGE_FRAMING_OVERHEAD;
 
-            // If adding this text would exceed our safe batch limit
-            if (currentBytes + size > BATCH_SIZE) {
+            // If adding this text would exceed our safe batch limit or the response would become too big
+            int requestSize = currentBytes + size;
+            int responseSize = (currentBatch.size() + 1) * embeddingSize + requestSize;
+            if (requestSize > BATCH_SIZE || responseSize > MAX_MESSAGE_SIZE) {
                 if (!currentBatch.isEmpty()) {
                     chunks.add(List.copyOf(currentBatch));
                     currentBatch.clear();
@@ -149,6 +155,11 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
 
                 // If single item is huge (> limit), force it as its own batch
                 if (size > BATCH_SIZE) {
+                    // will have to trim it so it fits
+                    if (size > MAX_MESSAGE_SIZE) {
+                       String trimmed = trim(segment.text());
+                       segment = new TextSegment(trimmed, segment.metadata());
+                    }
                     chunks.add(List.of(segment));
                     continue;
                 }
@@ -163,6 +174,11 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
         }
 
         return chunks;
+    }
+
+    private String trim(String string) {
+        //get the first million characters assuming the worst case scenario of 4 byte characters
+        return string.substring(0, 1_000_000);
     }
 
     private List<Embedding> toLangchainEmbeddings(List<GraphwiseTransformer.Embedding> protoEmbeddings) {
