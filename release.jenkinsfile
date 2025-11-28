@@ -52,11 +52,13 @@ pipeline {
         }
 
         stage('Release') {
-            script {
-                sh """
+            steps {
+                script {
+                    sh """
                 mvn release:perform -V -B \
                 -Darguments="-DskipTests -Dmaven.install.skip=true -Dmaven.javadoc.skip=${params.skipDocs}"
                 """
+                }
             }
         }
     }
