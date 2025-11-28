@@ -1,3 +1,5 @@
+@Library("ontotext-platform@1.0.0-alpha") _
+
 pipeline {
 
     agent {
@@ -18,7 +20,8 @@ pipeline {
     environment {
         RELEASE_BRANCH = "release/${params.releaseVersion}"
         KEEPER_CREDENTIALS = 'ksm-jenkins'
-        KEEPER_M2_SETTINGS_FILE = 'keeper://w6o5mGXWgN7zNvrr6K7QGQ/file/settings.xml'
+        KEEPER_GITHUB_LOGIN_RECORD = '8hm1g9HCfBPgoWAmpiHn6w'
+        KEEPER_M2_SETTINGS_FILE = 'w6o5mGXWgN7zNvrr6K7QGQ'
     }
 
     stages {
@@ -31,38 +34,43 @@ pipeline {
 
         stage('Prepare') {
             steps {
-                withKsm(application: [
-                        [
-                                credentialsId: env.KEEPER_CREDENTIALS,
-                                secrets      : [
-                                        [destination: 'file', envVar: '', filePath: 'settings.xml', notation: env.KEEPER_M2_SETTINGS_FILE]
-                                ]
+                withKeeper(
+                        credentials: env.KEEPER_CREDENTIALS,
+                        envs: [
+                                [record: env.KEEPER_GITHUB_LOGIN_RECORD, prefix: 'GIT', fields: ['login', 'password']],
+                                [record: env.KEEPER_M2_SETTINGS_FILE, files: [[fileName: 'settings.xml']]]
                         ]
-                ]) {
+                ) {
+                    sh "cp ${WORKSPACE}/settings.xml ${HOME}/.m2/settings.xml"
                     script {
-                        skipTests = params.skipTests ? "-DskipTests" : ""
-                        skipDocs = params.publishJavadoc ? "false" : "true"
+                        maven.prepareRelease(
+                                releaseVersion: params.releaseVersion,
+                                developmentVersion: params.developmentVersion,
+                                publishJavadoc: params.publishJavadoc,
+                                skipTests: params.skipTests,
+                                gitUsername: env.GIT_LOGIN,
+                                gitPassword: env.GIT_PASSWORD
+                        )
                     }
-
-                    sh """
-                    cp ${WORKSPACE}/settings.xml ${HOME}/.m2/settings.xml
-
-                    mvn release:prepare -V -U -B \
-                    -DreleaseVersion='${params.releaseVersion}' \
-                    -DdevelopmentVersion='${params.developmentVersion}' \
-                    -Darguments="-Dmaven.javadoc.skip=${skipDocs} ${skipTests}"
-                    """
                 }
             }
         }
 
         stage('Release') {
             steps {
-                script {
-                    sh """
-                mvn release:perform -V -B \
-                -Darguments="-DskipTests -Dmaven.install.skip=true -Dmaven.javadoc.skip=${skipDocs}"
-                """
+                withKeeper(
+                        credentials: env.KEEPER_CREDENTIALS,
+                        envs: [
+                                [record: env.KEEPER_GITHUB_LOGIN_RECORD, prefix: 'GIT', fields: ['login', 'password']]
+                        ]
+                ) {
+                    script {
+                        maven.release(
+                                publishJavadoc: params.publishJavadoc,
+                                gitUsername: env.GIT_LOGIN,
+                                gitPassword: env.GIT_PASSWORD
+                        )
+                    }
                 }
             }
         }
@@ -70,20 +78,24 @@ pipeline {
 
     post {
         failure {
-            script {
-                sh "mvn -V release:rollback"
+            withKeeper(
+                    credentials: env.KEEPER_CREDENTIALS,
+                    envs: [
+                            [record: env.KEEPER_GITHUB_LOGIN_RECORD, prefix: 'GIT', fields: ['login', 'password']]
+                    ]
+            ) {
+                script {
+                    maven.rollbackRelease(
+                            gitUsername: env.GIT_LOGIN,
+                            gitPassword: env.GIT_PASSWORD
+                    )
+                }
             }
         }
 
         always {
-            wrap([$class: 'BuildUser']) {
-                emailext(
-                        to: env.BUILD_USER_EMAIL,
-                        from: "Jenkins <hudson@ontotext.com>",
-                        subject: '''[Jenkins] $PROJECT_NAME - Build #$BUILD_NUMBER - $BUILD_STATUS!''',
-                        mimeType: 'text/html',
-                        body: '''${SCRIPT, template="groovy-html.template"}'''
-                )
+            withUser {
+                sendMail(env.BUILD_USER_EMAIL)
             }
         }
     }
