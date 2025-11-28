@@ -1,0 +1,77 @@
+pipeline {
+
+    agent {
+        label 'aws-small'
+    }
+
+    tools {
+        maven 'maven3'
+        jdk 'jdk21'
+    }
+
+    options {
+        disableConcurrentBuilds()
+        timeout(time: 15, unit: 'MINUTES')
+        timestamps()
+    }
+
+    environment {
+        RELEASE_BRANCH = "release/${params.releaseVersion}"
+        KEEPER_CREDENTIALS = 'ksm-jenkins'
+        KEEPER_M2_SETTINGS_FILE = 'keeper://w6o5mGXWgN7zNvrr6K7QGQ/file/settings.xml'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Switch to release branch (create or use existing)
+                sh "git checkout ${RELEASE_BRANCH} || git checkout -b ${RELEASE_BRANCH}"
+            }
+        }
+
+        stage('Prepare') {
+            steps {
+                withKsm(application: [
+                        [
+                                credentialsId: env.KEEPER_CREDENTIALS,
+                                secrets      : [
+                                        [destination: 'file', envVar: '', filePath: 'settings.xml', notation: env.KEEPER_M2_SETTINGS_FILE]
+                                ]
+                        ]
+                ]) {
+                    sh """
+                    cp ${WORKSPACE}/settings.xml ${HOME}/.m2/settings.xml
+
+                    mvn release:prepare -V -U -B \
+                    -DreleaseVersion='${params.releaseVersion}' -DdevelopmentVersion='${params.devVersion}' \
+                    -DignoreSnapshots=${params.ignoreSnapshots} \
+                    -Darguments="-Dmaven.javadoc.skip=${params.skipDocs} ${params.skipTests}"
+                    """
+                }
+            }
+        }
+
+        stage('Release') {
+            script {
+                sh """
+                mvn release:perform -V -B \
+                -Darguments="-DskipTests -Dmaven.install.skip=true -Dmaven.javadoc.skip=${params.skipDocs}"
+                """
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                sh "mvn -V release:rollback"
+            }
+        }
+
+        always {
+            withUser {
+                sendMail(env.BUILD_USER_EMAIL)
+            }
+        }
+    }
+}
