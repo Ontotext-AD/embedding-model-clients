@@ -10,6 +10,7 @@
         <module>openai-embedding-client</module>
         <module>embedding-clients-common</module>
         <module>graphwise-transformer-client</module>
+        <module>azure-embedding-client</module>
         <module>assembly</module>
     </modules>
 

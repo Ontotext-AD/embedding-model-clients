@@ -62,6 +62,7 @@ Clients are configured via system properties.
 | `openai.embedding.model.api.key`      | Your OpenAI API key.         | yes      | none    |
 | `openai.embedding.model.name`         | The OpenAI model to use.     | yes      | none    |  
 | `openai.embedding.model.dimensions`   | The OpenAI model dimensions. | no       | none    | 
+| `openai.embedding.model.baseUrl`      | The base URL for connecting. | no       | none    |
 
 
 ## Usage

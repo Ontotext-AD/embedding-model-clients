@@ -21,6 +21,11 @@
         </dependency>
         <dependency>
             <groupId>com.ontotext</groupId>
+            <artifactId>azure-embedding-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ontotext</groupId>
             <artifactId>graphwise-transformer-client</artifactId>
             <version>${project.version}</version>
         </dependency>
