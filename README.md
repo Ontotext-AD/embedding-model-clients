@@ -2,7 +2,7 @@
 
 This project provides a collection of clients for interacting with various embedding models. It includes modules for
 specific embedding model providers
-like [Graphwise Transformer](https://github.com/Ontotext-AD/graphwise-transformer) and OpenAI API.
+like [Graphwise Transformer](https://github.com/Ontotext-AD/graphwise-transformer) and OpenAI API, including Azure OpenAI deployments.
 Clients are implementations of
 langchain4j [EmbeddingModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-core/src/main/java/dev/langchain4j/model/embedding/EmbeddingModel.java)
 interface.
@@ -23,6 +23,7 @@ and add them to your GraphDB distribution to use for similarity searches in Grap
 * **graphwise-transformer-client**: A client for interacting with
   a [Graphwise Transformer](https://github.com/Ontotext-AD/graphwise-transformer).
 * **openai-embedding-client**: A client for interacting with the OpenAI embedding API.
+* **azure-embedding-client**: A client for interacting with the Azure OpenAI embedding API.
 
 ## Building
 
@@ -64,6 +65,14 @@ Clients are configured via system properties.
 | `openai.embedding.model.dimensions`   | The OpenAI model dimensions. | no       | none    | 
 | `openai.embedding.model.baseUrl`      | The base URL for connecting. | no       | none    |
 
+### AzureEmbeddingModel
+
+| Property                              | Description                      | Required | Default |
+|---------------------------------------|----------------------------------|----------|---------|
+| `openai.embedding.model.api.key`      | Your Azure API key.              | yes      | none    |
+| `openai.embedding.model.name`         | The Azure deployment to use.     | yes      | none    |  
+| `openai.embedding.model.dimensions`   | The Azure deployment dimensions. | no       | none    | 
+| `openai.embedding.model.baseUrl`      | The base URL for connecting.     | no       | none    |
 
 ## Usage
 
@@ -73,7 +82,8 @@ Connectors by specifying the fully qualified class name of the desired implement
 **Example values for `embeddingModel` parameter:**
 
 * `com.ontotext.embeddings.GraphwiseTransformerClient`
-* `com.ontotext.embeddings.OpenAIEmbeddingClient`
+* `com.ontotext.embeddings.OpenAIEmbeddingModel`
+* `com.ontotext.embeddings.AzureEmbeddingModel`
 
 ## License
 
