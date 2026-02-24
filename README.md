@@ -67,12 +67,12 @@ Clients are configured via system properties.
 
 ### AzureEmbeddingModel
 
-| Property                              | Description                      | Required | Default |
-|---------------------------------------|----------------------------------|----------|---------|
-| `openai.embedding.model.api.key`      | Your Azure API key.              | yes      | none    |
-| `openai.embedding.model.name`         | The Azure deployment to use.     | yes      | none    |  
-| `openai.embedding.model.dimensions`   | The Azure deployment dimensions. | no       | none    | 
-| `openai.embedding.model.baseUrl`      | The base URL for connecting.     | no       | none    |
+| Property                           | Description                      | Required | Default |
+|------------------------------------|----------------------------------|----------|---------|
+| `azure.embedding.model.api.key`    | Your Azure API key.              | yes      | none    |
+| `azure.embedding.model.name`       | The Azure deployment to use.     | yes      | none    |  
+| `azure.embedding.model.dimensions` | The Azure deployment dimensions. | no       | none    | 
+| `azure.embedding.model.baseUrl`    | The base URL for connecting.     | no       | none    |
 
 ## Usage
 

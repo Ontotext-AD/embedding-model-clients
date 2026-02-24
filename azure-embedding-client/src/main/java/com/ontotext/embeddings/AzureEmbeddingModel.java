@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 
 public class AzureEmbeddingModel implements EmbeddingModel {
 
-  public static final String MODEL_NAME = "openai.embedding.model.name";
-  public static final String API_KEY = "openai.embedding.model.api.key";
-  public static final String DIMENSIONS = "openai.embedding.model.dimensions";
-  public static final String URI = "openai.embedding.model.baseUrl";
+  public static final String MODEL_NAME = "azure.embedding.model.name";
+  public static final String API_KEY = "azure.embedding.model.api.key";
+  public static final String DIMENSIONS = "azure.embedding.model.dimensions";
+  public static final String URI = "azure.embedding.model.baseUrl";
   private static final Logger LOGGER = LoggerFactory.getLogger(AzureEmbeddingModel.class);
   private final EmbeddingModel embeddingModel;
 
