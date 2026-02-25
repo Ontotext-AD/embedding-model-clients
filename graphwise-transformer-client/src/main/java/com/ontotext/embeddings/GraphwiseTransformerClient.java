@@ -48,12 +48,20 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
     private final InferenceServiceGrpc.InferenceServiceBlockingStub stub;
     private final ExecutorService executor;
     private final int embeddingSize;
+    private final String modelName;
 
-    public GraphwiseTransformerClient() {
+    public GraphwiseTransformerClient(String modelName) {
+        this.modelName = resolveModelName(modelName);
         this.channel = buildChannel();
         this.stub = InferenceServiceGrpc.newBlockingStub(channel);
         this.executor = createExecutor();
         this.embeddingSize = this.dimension() * FLOAT_BYTES;
+    }
+
+    //Used in GraphDB 11.2.x and 11.3.x
+    @Deprecated
+    public GraphwiseTransformerClient() {
+        this(MODEL_NAME);
     }
 
     @Override
@@ -63,7 +71,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
         List<CompletableFuture<List<Embedding>>> futures = batches.stream()
                 .map(batch -> CompletableFuture.supplyAsync(() -> {
                     GraphwiseTransformer.SentenceRequest request = GraphwiseTransformer.SentenceRequest.newBuilder()
-                            .setModelName(MODEL_NAME)
+                            .setModelName(modelName)
                             .addAllTexts(batch.stream().map(TextSegment::text).toList())
                             .build();
 
@@ -104,6 +112,13 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
         }
     }
 
+    private String resolveModelName(String modelName) {
+        if (modelName == null || modelName.isEmpty()) {
+            modelName = MODEL_NAME;
+        }
+        return modelName;
+    }
+
     private ManagedChannel buildChannel() {
         String[] parts = ADDRESS.split(":");
         String host = parts[0];
@@ -127,7 +142,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
                 r -> {
                     Thread t = new Thread(r);
                     t.setDaemon(true);
-                    t.setName("graphwise-embedding-" + MODEL_NAME);
+                    t.setName("graphwise-embedding-" + modelName);
                     return t;
                 },
                 new ThreadPoolExecutor.CallerRunsPolicy() // backpressure
@@ -157,8 +172,8 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
                 if (size > BATCH_SIZE) {
                     // will have to trim it so it fits
                     if (size > MAX_MESSAGE_SIZE) {
-                       String trimmed = trim(segment.text());
-                       segment = new TextSegment(trimmed, segment.metadata());
+                        String trimmed = trim(segment.text());
+                        segment = new TextSegment(trimmed, segment.metadata());
                     }
                     chunks.add(List.of(segment));
                     continue;
