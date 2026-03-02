@@ -2,7 +2,8 @@
 
 This project provides a collection of clients for interacting with various embedding models. It includes modules for
 specific embedding model providers
-like [Graphwise Transformer](https://github.com/Ontotext-AD/graphwise-transformer) and OpenAI API, including Azure OpenAI deployments.
+like [Graphwise Transformer](https://github.com/Ontotext-AD/graphwise-transformer) and OpenAI API, including Azure
+OpenAI deployments.
 Clients are implementations of
 langchain4j [EmbeddingModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-core/src/main/java/dev/langchain4j/model/embedding/EmbeddingModel.java)
 interface.
@@ -58,19 +59,19 @@ Clients are configured via system properties.
 
 ### OpenAIEmbeddingClient
 
-| Property                              | Description                  | Required | Default |
-|---------------------------------------|------------------------------|----------|---------|
-| `openai.embedding.model.api.key`      | Your OpenAI API key.         | yes      | none    |
-| `openai.embedding.model.name`         | The OpenAI model to use.     | yes      | none    |  
-| `openai.embedding.model.dimensions`   | The OpenAI model dimensions. | no       | none    | 
-| `openai.embedding.model.baseUrl`      | The base URL for connecting. | no       | none    |
+| Property                            | Description                  | Required | Default |
+|-------------------------------------|------------------------------|----------|---------|
+| `openai.embedding.model.api.key`    | Your OpenAI API key.         | yes      | none    |
+| `openai.embedding.model.name`       | The OpenAI model to use.     | no       | none    |  
+| `openai.embedding.model.dimensions` | The OpenAI model dimensions. | no       | none    | 
+| `openai.embedding.model.baseUrl`    | The base URL for connecting. | no       | none    |
 
 ### AzureEmbeddingModel
 
 | Property                           | Description                      | Required | Default |
 |------------------------------------|----------------------------------|----------|---------|
 | `azure.embedding.model.api.key`    | Your Azure API key.              | yes      | none    |
-| `azure.embedding.model.name`       | The Azure deployment to use.     | yes      | none    |  
+| `azure.embedding.model.name`       | The Azure deployment to use.     | no       | none    |  
 | `azure.embedding.model.dimensions` | The Azure deployment dimensions. | no       | none    | 
 | `azure.embedding.model.baseUrl`    | The base URL for connecting.     | no       | none    |
 
