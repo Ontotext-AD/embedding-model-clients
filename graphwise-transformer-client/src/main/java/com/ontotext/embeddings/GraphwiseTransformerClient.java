@@ -114,7 +114,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
 
     private String resolveModelName(String modelName) {
         if (modelName == null || modelName.isEmpty()) {
-            return MODEL_NAME;
+            modelName = MODEL_NAME;
         }
         return modelName;
     }
