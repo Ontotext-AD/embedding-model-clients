@@ -44,15 +44,14 @@ public class OpenAiEmbeddingModel implements EmbeddingModel {
             // Strip trailing slash.
             uri = Config.getProperty(URI_PROPERTY).replaceAll("/+$", "");
         }
-        String model = Config.getProperty(modelName);
         dev.langchain4j.model.openai.OpenAiEmbeddingModel.OpenAiEmbeddingModelBuilder builder =
-                dev.langchain4j.model.openai.OpenAiEmbeddingModel.builder().baseUrl(uri).modelName(model)
+                dev.langchain4j.model.openai.OpenAiEmbeddingModel.builder().baseUrl(uri).modelName(modelName)
                         .apiKey(Config.getProperty(API_KEY_PROPERTY));
         String dimensions = Config.getProperty(DIMENSIONS_PROPERTY);
         if (dimensions != null && !dimensions.isEmpty()) {
             builder.dimensions(Config.getPropertyInt(DIMENSIONS_PROPERTY));
         }
-        LOGGER.info("Creating OpenAI Embedding model with endpoint {} and deployment {}.", uri, model);
+        LOGGER.info("Creating OpenAI Embedding model with endpoint {} and deployment {}.", uri, modelName);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.info("Will log requests and responses.");
             builder.logRequests(true);

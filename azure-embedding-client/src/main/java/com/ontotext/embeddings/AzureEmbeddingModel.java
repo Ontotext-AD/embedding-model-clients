@@ -46,16 +46,15 @@ public class AzureEmbeddingModel implements EmbeddingModel {
             // Strip trailing slash.
             uri = Config.getProperty(URI_PROPERTY).replaceAll("/+$", "");
         }
-        String deployment = Config.getProperty(modelName);
         AzureOpenAiEmbeddingModel.Builder builder =
-                AzureOpenAiEmbeddingModel.builder().deploymentName(deployment).endpoint(uri)
+                AzureOpenAiEmbeddingModel.builder().deploymentName(modelName).endpoint(uri)
                         .apiKey(Config.getProperty(API_KEY_PROPERTY));
         String dimensions = Config.getProperty(DIMENSIONS_PROPERTY);
         if (dimensions != null && !dimensions.isEmpty()) {
             builder.dimensions(Config.getPropertyInt(DIMENSIONS_PROPERTY));
         }
         LOGGER.info("Creating Azure Embedding model with endpoint {} and deployment {}.", uri,
-                deployment);
+                modelName);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.info("Will log requests and responses.");
             builder.logRequestsAndResponses(true);
