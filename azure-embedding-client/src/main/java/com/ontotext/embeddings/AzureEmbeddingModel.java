@@ -37,6 +37,7 @@ public class AzureEmbeddingModel implements EmbeddingModel {
         if (modelName == null || modelName.isEmpty()) {
             modelName = Config.getProperty(MODEL_NAME_PROPERTY);
         }
+        LOGGER.info("Creating instance using model: {}", modelName);
         return modelName;
     }
 
