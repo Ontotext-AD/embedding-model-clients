@@ -13,6 +13,8 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.nio.charset.StandardCharsets;
@@ -43,6 +45,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
     private static final String ADDRESS = Config.getProperty(ADDRESS_PROPERTY, ADDRESS_DEFAULT);
     private static final int BATCH_SIZE = Config.getPropertyInt(BATCH_SIZE_PROPERTY, BATCH_SIZE_DEFAULT) * 1024;
     private static final int THREAD_POOL_SIZE = Config.getPropertyInt(THREAD_POOL_SIZE_PROPERTY, -1);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GraphwiseTransformerClient.class);
 
     private final ManagedChannel channel;
     private final InferenceServiceGrpc.InferenceServiceBlockingStub stub;
@@ -116,6 +119,7 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
         if (modelName == null || modelName.isEmpty()) {
             modelName = MODEL_NAME;
         }
+        LOGGER.info("Creating instance using model: {}", modelName);
         return modelName;
     }
 
