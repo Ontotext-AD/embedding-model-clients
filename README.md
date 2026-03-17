@@ -73,7 +73,7 @@ Clients are configured via system properties.
 | `azure.embedding.model.api.key`    | Your Azure API key.              | yes      | none    |
 | `azure.embedding.model.name`       | The Azure deployment to use.     | no       | none    |  
 | `azure.embedding.model.dimensions` | The Azure deployment dimensions. | no       | none    | 
-| `azure.embedding.model.baseUrl`    | The base URL for connecting.     | no       | none    |
+| `azure.embedding.model.baseUrl`    | The base URL for connecting.     | yes      | none    |
 
 ## Usage
 
