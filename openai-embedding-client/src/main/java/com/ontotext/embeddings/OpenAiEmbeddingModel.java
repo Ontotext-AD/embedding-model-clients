@@ -40,7 +40,7 @@ public class OpenAiEmbeddingModel implements EmbeddingModel {
     }
 
     private EmbeddingModel createEmbeddingModel() {
-        String uri = null; // The builder will throw an error if null.
+        String uri = null; // The builder will use the OpenAI default if null.
         if (Config.getProperty(URI_PROPERTY) != null) {
             // Strip trailing slash.
             uri = Config.getProperty(URI_PROPERTY).replaceAll("/+$", "");
