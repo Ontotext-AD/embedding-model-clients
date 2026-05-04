@@ -26,7 +26,7 @@
         <maven.release.plugin.version>3.2.0</maven.release.plugin.version>
         <maven.dependency.plugin.version>3.6.0</maven.dependency.plugin.version>
         <langchain4j.version>1.8.0</langchain4j.version>
-        <langchain4j.embeddings.version>1.8.0-beta15</langchain4j.embeddings.version>
+        <langchain4j.embeddings.version>1.8.0</langchain4j.embeddings.version>
         <djl.tokenizer.version>0.31.1</djl.tokenizer.version>
         <slf4j.version>2.0.16</slf4j.version>
         <jackson.version>2.15.3</jackson.version>
@@ -62,6 +62,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-core-http-netty</artifactId>
+                <scope>provided</scope>
+            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
