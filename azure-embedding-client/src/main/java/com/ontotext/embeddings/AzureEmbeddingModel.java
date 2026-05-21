@@ -1,6 +1,6 @@
 package com.ontotext.embeddings;
 
-import com.ontotext.Config;
+import com.ontotext.graphdb.Config;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.azure.AzureOpenAiEmbeddingModel;
@@ -52,7 +52,7 @@ public class AzureEmbeddingModel implements EmbeddingModel {
                         .apiKey(Config.getProperty(API_KEY_PROPERTY));
         String dimensions = Config.getProperty(DIMENSIONS_PROPERTY);
         if (dimensions != null && !dimensions.isEmpty()) {
-            builder.dimensions(Config.getPropertyInt(DIMENSIONS_PROPERTY));
+            builder.dimensions(Integer.parseInt(Config.getProperty(DIMENSIONS_PROPERTY)));
         }
         LOGGER.info("Creating Azure Embedding model with endpoint {} and deployment {}.", uri,
                 modelName);

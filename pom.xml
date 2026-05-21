@@ -8,7 +8,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>openai-embedding-client</module>
-        <module>embedding-clients-common</module>
         <module>graphwise-transformer-client</module>
         <module>azure-embedding-client</module>
         <module>assembly</module>
@@ -25,6 +24,7 @@
         <maven.license.plugin.version>2.0.0</maven.license.plugin.version>
         <maven.release.plugin.version>3.2.0</maven.release.plugin.version>
         <maven.dependency.plugin.version>3.6.0</maven.dependency.plugin.version>
+        <graphdb.version>11.3.2</graphdb.version>
         <langchain4j.version>1.15.0</langchain4j.version>
         <langchain4j.embeddings.version>1.15.0</langchain4j.embeddings.version>
         <djl.tokenizer.version>0.31.1</djl.tokenizer.version>
@@ -39,7 +39,15 @@
         <azure.core.http.netty.version>1.16.0</azure.core.http.netty.version>
         <internal.repo>https://maven.ontotext.com/content/repositories/owlim-releases</internal.repo>
         <snapshots.repo>https://maven.ontotext.com/content/repositories/owlim-snapshots</snapshots.repo>
+        <public.repo>https://maven.ontotext.com/repository/owlim-releases</public.repo>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>graphdb-public</id>
+            <url>${public.repo}</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>
@@ -60,6 +68,15 @@
         <url>https://github.com/Ontotext-AD/embedding-model-clients</url>
         <tag>HEAD</tag>
     </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ontotext.graphdb</groupId>
+            <artifactId>graphdb-runtime</artifactId>
+            <version>${graphdb.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>

@@ -2,7 +2,7 @@ package com.ontotext.embeddings;
 
 import ai.graphwise.transformer.GraphwiseTransformer;
 import ai.graphwise.transformer.InferenceServiceGrpc;
-import com.ontotext.Config;
+import com.ontotext.graphdb.Config;
 import com.ontotext.embeddings.security.AuthClientInterceptor;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
@@ -43,8 +43,8 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
 
     private static final String MODEL_NAME = Config.getProperty(MODEL_NAME_PROPERTY, MODEL_NAME_DEFAULT);
     private static final String ADDRESS = Config.getProperty(ADDRESS_PROPERTY, ADDRESS_DEFAULT);
-    private static final int BATCH_SIZE = Config.getPropertyInt(BATCH_SIZE_PROPERTY, BATCH_SIZE_DEFAULT) * 1024;
-    private static final int THREAD_POOL_SIZE = Config.getPropertyInt(THREAD_POOL_SIZE_PROPERTY, -1);
+    private static final int BATCH_SIZE = Config.getPropertyAsInt(BATCH_SIZE_PROPERTY, BATCH_SIZE_DEFAULT) * 1024;
+    private static final int THREAD_POOL_SIZE = Config.getPropertyAsInt(THREAD_POOL_SIZE_PROPERTY, -1);
     private static final Logger LOGGER = LoggerFactory.getLogger(GraphwiseTransformerClient.class);
 
     private final ManagedChannel channel;
