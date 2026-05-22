@@ -50,6 +50,8 @@
                             <includedLicenses>true</includedLicenses>
                             <useMissingFile>true</useMissingFile>
                             <failOnMissing>false</failOnMissing>
+                            <useRepositoryMissingFiles>false</useRepositoryMissingFiles>
+                            <excludedGroups>com\.ontotext</excludedGroups>
                         </configuration>
                     </execution>
                 </executions>
