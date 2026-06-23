@@ -10,6 +10,7 @@
         <module>openai-embedding-client</module>
         <module>graphwise-transformer-client</module>
         <module>azure-embedding-client</module>
+        <module>aws-bedrock-embedding-client</module>
         <module>assembly</module>
     </modules>
 
@@ -30,14 +31,15 @@
         <djl.tokenizer.version>0.31.1</djl.tokenizer.version>
         <slf4j.version>2.0.16</slf4j.version>
         <jackson.version>2.18.6</jackson.version>
-        <!-- This should always be checked with the Netty BOM which is in the dependency manager, the netty is coming from few libs, but we need the latest none vulnerable version!-->
-        <grpc.version>1.81.0</grpc.version>
+        <grpc.version>1.66.0</grpc.version>
         <protobuf.version>3.25.5</protobuf.version>
         <protobuf.maven.version>0.6.1</protobuf.maven.version>
         <os.maven.version>1.7.1</os.maven.version>
         <j2objc.version>3.0.0</j2objc.version>
         <azure.core.version>1.54.1</azure.core.version>
         <azure.core.http.netty.version>1.16.0</azure.core.http.netty.version>
+        <netty.version>4.1.100</netty.version>
+        <httpcomponents.version>4.4.15</httpcomponents.version>
         <internal.repo>https://maven.ontotext.com/content/repositories/owlim-releases</internal.repo>
         <snapshots.repo>https://maven.ontotext.com/content/repositories/owlim-snapshots</snapshots.repo>
         <public.repo>https://maven.ontotext.com/repository/owlim-releases</public.repo>
@@ -117,14 +119,12 @@
                 <version>${jackson.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!-- Check the grpc version when bumping this !-->
             <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-bom</artifactId>
-                <version>4.1.135.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpcore-nio</artifactId>
+			    <version>${httpcomponents.version}</version>
+			    <scope>compile</scope>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 
