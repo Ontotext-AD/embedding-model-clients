@@ -1,6 +1,6 @@
 package com.ontotext.embeddings;
 
-import com.ontotext.Config;
+import com.ontotext.graphdb.Config;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.bedrock.BedrockCohereEmbeddingModel;
