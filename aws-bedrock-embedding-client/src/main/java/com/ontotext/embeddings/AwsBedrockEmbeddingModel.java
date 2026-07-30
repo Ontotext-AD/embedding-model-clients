@@ -18,8 +18,6 @@ import java.util.List;
 public class AwsBedrockEmbeddingModel implements EmbeddingModel {
 
 	public static final String MODEL_NAME_PROPERTY = "aws.bedrock.embedding.model.name";
-	public static final String API_KEY_PROPERTY = "aws.bedrock.embedding.model.api.key";
-	public static final String API_SECRET_PROPERTY = "aws.bedrock.embedding.model.api.secret";
 	public static final String REGION_PROPERTY = "aws.bedrock.embedding.model.region";
 	private static final Logger LOGGER = LoggerFactory.getLogger(AwsBedrockEmbeddingModel.class);
 	
