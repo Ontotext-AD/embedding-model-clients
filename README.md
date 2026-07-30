@@ -25,6 +25,8 @@ and add them to your GraphDB distribution to use for similarity searches in Grap
   a [Graphwise Transformer](https://github.com/Ontotext-AD/graphwise-transformer).
 * **openai-embedding-client**: A client for interacting with the OpenAI embedding API.
 * **azure-embedding-client**: A client for interacting with the Azure OpenAI embedding API.
+* **aws-bedrock-embedding-client**: A client for interacting with the Aws Bedrock embedding API.
+
 
 ## Building
 
@@ -75,6 +77,20 @@ Clients are configured via system properties.
 | `azure.embedding.model.dimensions` | The Azure deployment dimensions. | no       | none    | 
 | `azure.embedding.model.baseUrl`    | The base URL for connecting.     | yes      | none    |
 
+### AwsBedrockEmbeddingModel
+
+| Property                                 | Description        | Required | Default |
+|------------------------------------------|--------------------|----------|---------|
+| `aws.bedrock.embedding.model.name`       | The AWS model.     | no       | none    |
+| `aws.bedrock.embedding.model.region`     | Your AWS region.   | yes      | none    |
+
+Additionaly, for AWS access 2 environment variables must be defined:
+
+| Environment variable      | Description            | Required |
+|---------------------------|------------------------|----------|
+| `AWS_ACCESS_KEY_ID`       | Your AWS Key ID.       | yes      |
+| `AWS_SECRET_ACCESS_KEY`   | Your AWS Secret Key.   | yes      |
+
 ## Usage
 
 Once the JAR is on the classpath and the necessary properties are configured, you can use the clients in GraphDB
@@ -85,6 +101,7 @@ Connectors by specifying the fully qualified class name of the desired implement
 * `com.ontotext.embeddings.GraphwiseTransformerClient`
 * `com.ontotext.embeddings.OpenAIEmbeddingModel`
 * `com.ontotext.embeddings.AzureEmbeddingModel`
+* `com.ontotext.embeddings.AwsBedrockEmbeddingModel`
 
 ## License
 
