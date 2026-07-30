@@ -81,15 +81,13 @@ Clients are configured via system properties.
 
 | Property                                 | Description        | Required | Default |
 |------------------------------------------|--------------------|----------|---------|
-| `aws.bedrock.embedding.model.name`       | The AWS model.     | yes      | none    |
+| `aws.bedrock.embedding.model.name`       | The AWS model.     | no       | none    |
 | `aws.bedrock.embedding.model.region`     | Your AWS region.   | yes      | none    |
-
-if using GraphDB version 1.4 or higher, you can skip the `aws.bedrock.embedding.model.name` property and pass the model name as `embeddingModelName` parameter of the connector configuration.
 
 Additionaly, for AWS access 2 environment variables must be defined:
 
-| Environment variable      | Description            | Required | 
-|----------------------------------------------------|----------|
+| Environment variable      | Description            | Required |
+|---------------------------|------------------------|----------|
 | `AWS_ACCESS_KEY_ID`       | Your AWS Key ID.       | yes      |
 | `AWS_SECRET_ACCESS_KEY`   | Your AWS Secret Key.   | yes      |
 
