@@ -1,5 +1,6 @@
 package com.ontotext.embeddings;
 
+import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.ontotext.graphdb.Config;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
@@ -48,8 +49,16 @@ public class AzureEmbeddingModel implements EmbeddingModel {
             uri = Config.getProperty(URI_PROPERTY).replaceAll("/+$", "");
         }
         AzureOpenAiEmbeddingModel.Builder builder =
-                AzureOpenAiEmbeddingModel.builder().deploymentName(modelName).endpoint(uri)
-                        .apiKey(Config.getProperty(API_KEY_PROPERTY));
+            AzureOpenAiEmbeddingModel.builder().deploymentName(modelName).endpoint(uri);
+        String apiKey = Config.getProperty(API_KEY_PROPERTY);
+        if (apiKey != null && !apiKey.trim().isEmpty()) {
+            LOGGER.info("Using API Key authentication for Azure OpenAI.");
+            builder.apiKey(Config.getProperty(API_KEY_PROPERTY));
+        } else {
+            LOGGER.info("No API Key provided. "
+                + "Falling back to Entra ID (DefaultAzureCredential) authentication.");
+            builder.tokenCredential(new DefaultAzureCredentialBuilder().build());
+        }
         String dimensions = Config.getProperty(DIMENSIONS_PROPERTY);
         if (dimensions != null && !dimensions.isEmpty()) {
             builder.dimensions(Integer.parseInt(Config.getProperty(DIMENSIONS_PROPERTY)));
