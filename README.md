@@ -70,12 +70,20 @@ Clients are configured via system properties.
 
 ### AzureEmbeddingModel
 
-| Property                           | Description                      | Required | Default |
-|------------------------------------|----------------------------------|----------|---------|
-| `azure.embedding.model.api.key`    | Your Azure API key.              | yes      | none    |
-| `azure.embedding.model.name`       | The Azure deployment to use.     | no       | none    |  
-| `azure.embedding.model.dimensions` | The Azure deployment dimensions. | no       | none    | 
-| `azure.embedding.model.baseUrl`    | The base URL for connecting.     | yes      | none    |
+| Property                           | Description                                                | Required | Default |
+|------------------------------------|------------------------------------------------------------|----------|---------|
+| `azure.embedding.model.api.key`    | Your Azure API key.                                        | no       | none    |
+| `azure.embedding.model.name`       | The Azure deployment to use.                               | no       | none    |
+| `azure.embedding.model.dimensions` | The Azure deployment dimensions.                           | no       | none    |
+| `azure.embedding.model.baseUrl`    | The base URL for connecting.                               | yes      | none    |
+
+| Environment variables | Description                                                | Required | Default |
+|-----------------------|------------------------------------------------------------|----------|---------|
+| `AZURE_CLIENT_ID`     | Specifies the client ID of Microsoft Entra app to be used. | no       | none    |
+| `AZURE_TENANT_ID`     | Specifies the tenant ID.                                   | no       | none    |
+| `AZURE_CLIENT_SECRET` | Specifies the client secret.                               | no       | none    |
+
+One must set either `azure.embedding.model.api.key` or `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_CLIENT_SECRET`.
 
 ### AwsBedrockEmbeddingModel
 
