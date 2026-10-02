@@ -1,5 +1,6 @@
 package com.ontotext.embeddings;
 
+import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.ontotext.graphdb.Config;
 import dev.langchain4j.data.embedding.Embedding;
@@ -16,6 +17,9 @@ public class AzureEmbeddingModel implements EmbeddingModel {
 
     public static final String MODEL_NAME_PROPERTY = "azure.embedding.model.name";
     public static final String API_KEY_PROPERTY = "azure.embedding.model.api.key";
+    public static final String TENANT_ID_PROPERTY = "azure.embedding.tenant.id";
+    public static final String CLIENT_ID_PROPERTY = "azure.embedding.client.id";
+    public static final String CLIENT_SECRET_PROPERTY = "azure.embedding.client.secret";
     public static final String DIMENSIONS_PROPERTY = "azure.embedding.model.dimensions";
     public static final String URI_PROPERTY = "azure.embedding.model.baseUrl";
     private static final Logger LOGGER = LoggerFactory.getLogger(AzureEmbeddingModel.class);
@@ -50,18 +54,34 @@ public class AzureEmbeddingModel implements EmbeddingModel {
         }
         AzureOpenAiEmbeddingModel.Builder builder =
             AzureOpenAiEmbeddingModel.builder().deploymentName(modelName).endpoint(uri);
+
         String apiKey = Config.getProperty(API_KEY_PROPERTY);
+        String tenantId = Config.getProperty(TENANT_ID_PROPERTY);
+        String clientId = Config.getProperty(CLIENT_ID_PROPERTY);
+        String clientSecret = Config.getProperty(CLIENT_SECRET_PROPERTY);
+
         if (apiKey != null && !apiKey.trim().isEmpty()) {
             LOGGER.info("Using API Key authentication for Azure OpenAI.");
-            builder.apiKey(Config.getProperty(API_KEY_PROPERTY));
+            builder.apiKey(apiKey);
+        } else if (tenantId != null && clientId != null && clientSecret != null) {
+            LOGGER.info("Using properties `azure.embedding.tenant.id`, `azure.embedding.client.id`"
+                + "and `azure.embedding.client.secret` for authentication for Azure OpenAI.");
+            builder.tokenCredential(
+                new ClientSecretCredentialBuilder()
+                    .tenantId(tenantId)
+                    .clientId(clientId)
+                    .clientSecret(clientSecret)
+                    .build()
+            );
         } else {
-            LOGGER.info("No API Key provided. "
-                + "Falling back to Entra ID (DefaultAzureCredential) authentication.");
+            LOGGER.info("Can't configure Azure OpenAI with the provided properties. "
+                + "Falling back to DefaultAzureCredential.");
             builder.tokenCredential(new DefaultAzureCredentialBuilder().build());
         }
+
         String dimensions = Config.getProperty(DIMENSIONS_PROPERTY);
         if (dimensions != null && !dimensions.isEmpty()) {
-            builder.dimensions(Integer.parseInt(Config.getProperty(DIMENSIONS_PROPERTY)));
+            builder.dimensions(Integer.parseInt(dimensions));
         }
         LOGGER.info("Creating Azure Embedding model with endpoint {} and deployment {}.", uri,
                 modelName);
