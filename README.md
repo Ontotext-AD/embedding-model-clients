@@ -73,6 +73,9 @@ Clients are configured via system properties.
 | Property                           | Description                                                | Required | Default |
 |------------------------------------|------------------------------------------------------------|----------|---------|
 | `azure.embedding.model.api.key`    | Your Azure API key.                                        | no       | none    |
+| `azure.embedding.client.id`        | Specifies the client ID of Microsoft Entra app to be used. | no       | none    |
+| `azure.embedding.tenant.id`        | Specifies the tenant ID.                                   | no       | none    |
+| `azure.embedding.client.secret`    | Specifies the client secret.                               | no       | none    |
 | `azure.embedding.model.name`       | The Azure deployment to use.                               | no       | none    |
 | `azure.embedding.model.dimensions` | The Azure deployment dimensions.                           | no       | none    |
 | `azure.embedding.model.baseUrl`    | The base URL for connecting.                               | yes      | none    |
@@ -83,7 +86,12 @@ Clients are configured via system properties.
 | `AZURE_TENANT_ID`     | Specifies the tenant ID.                                   | no       | none    |
 | `AZURE_CLIENT_SECRET` | Specifies the client secret.                               | no       | none    |
 
-One must set either `azure.embedding.model.api.key` or `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_CLIENT_SECRET`.
+Authentication workflow:
+- If `azure.embedding.model.api.key` is provided, then this key is used for authentication.
+- If the key is not provided, then the workflow tries to use the properties `azure.embedding.client.id`, `azure.embedding.tenant.id`, and `azure.embedding.client.secret`.
+- If neither the key nor the properties are provided, the workflow falls back to `DefaultAzureCredentialBuilder` (i.e., using the environment variables `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_CLIENT_SECRET`).
+
+Note: Keep in mind that GraphDB backups also use these environment variables as the preferred option.
 
 ### AwsBedrockEmbeddingModel
 
