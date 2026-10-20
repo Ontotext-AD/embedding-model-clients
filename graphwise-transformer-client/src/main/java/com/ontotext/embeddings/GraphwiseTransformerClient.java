@@ -58,7 +58,16 @@ public class GraphwiseTransformerClient implements EmbeddingModel, Closeable {
         this.channel = buildChannel();
         this.stub = InferenceServiceGrpc.newBlockingStub(channel);
         this.executor = createExecutor();
-        this.embeddingSize = this.dimension() * FLOAT_BYTES;
+        try {
+            this.embeddingSize = this.dimension() * FLOAT_BYTES;
+        } catch (Exception e) {
+            // channel/executor are already open at this point (NRTS-16): if dimension()
+            // fails, this object is never fully constructed and never returned to the
+            // caller, so nothing else will ever close them - close them here instead.
+            channel.shutdownNow();
+            executor.shutdownNow();
+            throw e;
+        }
     }
 
     //Used in GraphDB 11.2.x and 11.3.x
